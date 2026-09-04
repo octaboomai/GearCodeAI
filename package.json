@@ -1,0 +1,109 @@
+{
+  "name": "robocode",
+  "displayName": "RoboCode — AI for Robotics",
+  "description": "AI-powered coding assistant for ROS 2, embedded C++, and drone development. Terminal error detection, one-click AI fixes, and workspace-aware context.",
+  "version": "0.1.0",
+  "publisher": "robocode",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["AI", "Programming Languages", "Other"],
+  "keywords": ["ROS2", "robotics", "AI", "drone", "embedded", "C++", "CMake"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "robocode.askAI",
+        "title": "RoboCode: Ask AI",
+        "category": "RoboCode"
+      },
+      {
+        "command": "robocode.fixError",
+        "title": "RoboCode: Fix Last Build Error",
+        "category": "RoboCode"
+      },
+      {
+        "command": "robocode.showContext",
+        "title": "RoboCode: Show Workspace Context",
+        "category": "RoboCode"
+      },
+      {
+        "command": "robocode.openChat",
+        "title": "RoboCode: Open AI Chat",
+        "category": "RoboCode"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "robocode.askAI",
+        "key": "ctrl+m",
+        "mac": "cmd+m",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "RoboCode",
+      "properties": {
+        "robocode.nimApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "NVIDIA NIM API key. Get one free at build.nvidia.com",
+          "scope": "application"
+        },
+        "robocode.nimModel": {
+          "type": "string",
+          "default": "deepseek-ai/deepseek-r1",
+          "enum": [
+            "deepseek-ai/deepseek-r1",
+            "nvidia/llama-3.1-nemotron-70b-instruct",
+            "qwen/qwen2.5-coder-32b-instruct",
+            "meta/llama-3.3-70b-instruct",
+            "mistralai/mistral-7b-instruct-v0.3"
+          ],
+          "enumDescriptions": [
+            "DeepSeek-R1 — Best for C++ error analysis and multi-step reasoning (recommended)",
+            "Nemotron 70B — NVIDIA's own fine-tune, optimised for NIM hardware",
+            "Qwen2.5-Coder 32B — Purpose-built for code, lower latency than 70B models",
+            "LLaMA 3.3 70B — General-purpose, solid fallback",
+            "Mistral 7B — Fastest/cheapest, best for simple explain-this queries"
+          ],
+          "description": "NVIDIA NIM model. DeepSeek-R1 is recommended for robotics code debugging.",
+          "scope": "application"
+        },
+        "robocode.errorSnifferEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect build errors in terminals and offer AI fixes",
+          "scope": "window"
+        },
+        "robocode.autoAnalyzeWorkspace": {
+          "type": "boolean",
+          "default": true,
+          "description": "Analyze ROS 2 workspace on startup for better AI context",
+          "scope": "window"
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "robocode.askAI",
+          "when": "editorHasSelection",
+          "group": "robocode@1"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.22.0"
+  }
+}
